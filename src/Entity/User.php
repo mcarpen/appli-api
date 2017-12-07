@@ -426,11 +426,8 @@ class User implements AdvancedUserInterface, \Serializable
 
         return $this;
     }
-
-    /**
-     * @return null|string
-     */
-    public function getReviews(): ?string
+    
+    public function getReviews()
     {
         return $this->reviews;
     }
@@ -517,7 +514,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->lastName,
             $this->address,
             $this->city,
-            $this->zip,
+            $this->zip
             ) = unserialize($serialized);
     }
 }
