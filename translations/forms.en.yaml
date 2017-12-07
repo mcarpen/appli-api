@@ -1,0 +1,10 @@
+user:
+    username: Username
+    email: Email
+    password: Password
+    password_confirm: Confirm password
+
+action:
+    user:
+        login: Login
+        register: Register
