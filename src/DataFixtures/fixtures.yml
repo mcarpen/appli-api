@@ -1,0 +1,29 @@
+App\Entity\User:
+    user_{1..100}:
+        username (unique): <username()>
+        password: <password()>
+        email (unique): <fr_FR:email()>
+        active: <boolean(75)>
+        first_name: <fr_FR:firstName()>
+        last_name: <fr_FR:lastName()>
+        address: <fr_FR:streetAddress()>
+        city: <fr_FR:city()>
+        zip: <fr_FR:postcode()>
+
+App\Entity\Restaurant:
+    restaurant_{1..50}:
+        name (unique): <fr_FR:company()>
+        description: <fr_FR:text(200)>
+        address: <fr_FR:streetAddress()>
+        city: <fr_FR:city()>
+        zip: <fr_FR:postcode()>
+        lat: <latitude()>
+        lng: <longitude()>
+
+App\Entity\Review:
+    review_{1..25}:
+        name: 'Avis #<current()>'
+        restaurant_id: '@restaurant_*'
+        user_id: '@user_*'
+
+App\Entity\Category:
