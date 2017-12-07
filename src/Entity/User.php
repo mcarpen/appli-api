@@ -81,11 +81,56 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $plainPassword;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=30)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=30)
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=100)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=30)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="zip", type="string", length=5)
+     */
+    private $zip;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Review", mappedBy="user_id")
+     */
+    private $reviews;
+
 
     const ROLE_DEFAULT     = 'ROLE_USER';
     const ROLE_ADMIN       = 'ROLE_ADMIN';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
+
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
 
     public function __construct()
     {
@@ -283,6 +328,114 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * @return null|string
+     */
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $firstName
+     *
+     * @return $this
+     */
+    public function setFirstName(string $firstName): User
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $lastName
+     *
+     * @return $this
+     */
+    public function setLastName(string $lastName): User
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return $this
+     */
+    public function setAddress(string $address): User
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     *
+     * @return $this
+     */
+    public function setCity(string $city): User
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getZip(): ?string
+    {
+        return $this->zip;
+    }
+
+    /**
+     * @param string $zip
+     *
+     * @return $this
+     */
+    public function setZip(string $zip): User
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getReviews(): ?string
+    {
+        return $this->reviews;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isAccountNonExpired(): bool
@@ -341,6 +494,11 @@ class User implements AdvancedUserInterface, \Serializable
             $this->email,
             $this->password,
             $this->active,
+            $this->firstName,
+            $this->lastName,
+            $this->address,
+            $this->city,
+            $this->zip,
         ]);
     }
 
@@ -354,7 +512,12 @@ class User implements AdvancedUserInterface, \Serializable
             $this->username,
             $this->email,
             $this->password,
-            $this->active
+            $this->active,
+            $this->firstName,
+            $this->lastName,
+            $this->address,
+            $this->city,
+            $this->zip,
             ) = unserialize($serialized);
     }
 }
