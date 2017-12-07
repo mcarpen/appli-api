@@ -112,7 +112,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="zip", type="string", length=5)
+     * @ORM\Column(name="zip", type="string", length=6)
      */
     private $zip;
 
@@ -426,7 +426,7 @@ class User implements AdvancedUserInterface, \Serializable
 
         return $this;
     }
-    
+
     public function getReviews()
     {
         return $this->reviews;

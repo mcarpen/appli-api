@@ -16,6 +16,11 @@ class UserFixtures extends Fixture
                 ->setEmail('admin@admin.com')
                 ->setPlainPassword('123')
                 ->addRole(User::ROLE_SUPER_ADMIN)
+                ->setFirstName('admin')
+                ->setLastName('admin')
+                ->setAddress('admin')
+                ->setCity('admin')
+                ->setZip('00000')
         );
 
         $manager->persist(
@@ -23,6 +28,11 @@ class UserFixtures extends Fixture
                 ->setUsername('user')
                 ->setEmail('user@user.com')
                 ->setPlainPassword('123')
+                ->setFirstName('user')
+                ->setLastName('user')
+                ->setAddress('user')
+                ->setCity('user')
+                ->setZip('00000')
         );
 
         $manager->flush();
