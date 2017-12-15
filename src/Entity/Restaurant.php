@@ -74,7 +74,7 @@ class Restaurant
     private $lng;
 
     /**
-     * @ORM\OneToMany(targetEntity="Review", mappedBy="restaurant_id")
+     * @ORM\OneToMany(targetEntity="Review", mappedBy="restaurant")
      */
     private $reviews;
 

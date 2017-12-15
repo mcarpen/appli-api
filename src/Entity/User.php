@@ -117,7 +117,7 @@ class User implements AdvancedUserInterface, \Serializable
     private $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity="Review", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Review", mappedBy="user")
      */
     private $reviews;
 

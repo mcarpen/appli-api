@@ -23,7 +23,5 @@ App\Entity\Restaurant:
 App\Entity\Review:
     review_{1..25}:
         name: 'Avis #<current()>'
-        restaurant_id: '@restaurant_*'
-        user_id: '@user_*'
-
-App\Entity\Category:
+        restaurant: '@restaurant_*'
+        user: '@user_*'
