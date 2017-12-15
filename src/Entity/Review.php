@@ -40,7 +40,7 @@ class Review
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="reviews")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user_id;
@@ -107,9 +107,9 @@ class Review
     }
 
     /**
-     * @return int|null
+     * @return User|null
      */
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
@@ -127,9 +127,9 @@ class Review
     }
 
     /**
-     * @return int|null
+     * @return Restaurant|null
      */
-    public function getRestaurantId(): ?int
+    public function getRestaurantId(): ?Restaurant
     {
         return $this->restaurant_id;
     }
