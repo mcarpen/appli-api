@@ -109,7 +109,7 @@ class Review
     /**
      * @return User|null
      */
-    public function getUser(): ?User
+    public function getUser()
     {
         return $this->user;
     }
@@ -129,7 +129,7 @@ class Review
     /**
      * @return Restaurant|null
      */
-    public function getRestaurant(): ?Restaurant
+    public function getRestaurant()
     {
         return $this->restaurant;
     }

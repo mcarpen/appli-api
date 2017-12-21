@@ -13,3 +13,7 @@ easy_admin:
             class: App\Entity\Review
         Category:
             class: App\Entity\Category
+            list:
+                fields: ['id', 'name']
+            form:
+                fields: ['name']

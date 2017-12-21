@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Restaurant
 {
-
     /**
      * @var int|null
      *
@@ -78,9 +78,19 @@ class Restaurant
      */
     private $reviews;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="restaurants")
+     */
+    private $categories;
+
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -232,10 +242,18 @@ class Restaurant
     }
 
     /**
-     * @return null|string
+     * @return ArrayCollection|Review[]
      */
-    public function getReviews(): ?string
+    public function getReviews()
     {
         return $this->reviews;
+    }
+
+    /**
+     * @return ArrayCollection|Category[]
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
