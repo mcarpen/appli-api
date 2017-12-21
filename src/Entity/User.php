@@ -450,6 +450,18 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * @param Category $category
+     */
+    public function setCategory(Category $category)
+    {
+        if ($this->categories->contains($category)) {
+            return;
+        }
+
+        $this->categories[] = $category;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isAccountNonExpired(): bool

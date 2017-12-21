@@ -256,4 +256,16 @@ class Restaurant
     {
         return $this->categories;
     }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory(Category $category)
+    {
+        if ($this->categories->contains($category)) {
+            return;
+        }
+
+        $this->categories[] = $category;
+    }
 }

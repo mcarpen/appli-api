@@ -1,3 +1,7 @@
+App\Entity\Category:
+    category_{1..20}:
+        name: <fr_FR:word()>
+
 App\Entity\User:
     user_{1..100}:
         username (unique): <username()>
@@ -9,6 +13,7 @@ App\Entity\User:
         address: <fr_FR:streetAddress()>
         city: <fr_FR:city()>
         zip: <fr_FR:postcode()>
+        category: '@category_*'
 
 App\Entity\Restaurant:
     restaurant_{1..50}:
@@ -19,6 +24,7 @@ App\Entity\Restaurant:
         zip: <fr_FR:postcode()>
         lat: <latitude()>
         lng: <longitude()>
+        category: '@category_*'
 
 App\Entity\Review:
     review_{1..25}:
