@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
-
     /**
      * @var int
      *
@@ -34,18 +33,23 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="categories")
      */
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Restaurant")
+     * @ORM\ManyToMany(targetEntity="Restaurant", mappedBy="categories")
      */
     private $restaurants;
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->users       = new ArrayCollection();
         $this->restaurants = new ArrayCollection();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -117,13 +118,17 @@ class User implements AdvancedUserInterface, \Serializable
     private $zip;
 
     /**
-     * @ORM\OneToMany(targetEntity="Review", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="Review", mappedBy="user")
      */
     private $reviews;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="users")
+     */
+    private $categories;
 
-    const ROLE_DEFAULT     = 'ROLE_USER';
-    const ROLE_ADMIN       = 'ROLE_ADMIN';
+    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
 
@@ -134,8 +139,9 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function __construct()
     {
-        $this->active = true;
-        $this->roles  = [];
+        $this->active     = true;
+        $this->roles      = [];
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -272,7 +278,7 @@ class User implements AdvancedUserInterface, \Serializable
             return $this;
         }
 
-        if (!in_array($role, $this->roles, true)) {
+        if ( ! in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -427,9 +433,32 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return ArrayCollection|Review[]
+     */
     public function getReviews()
     {
         return $this->reviews;
+    }
+
+    /**
+     * @return ArrayCollection|Category[]
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory(Category $category)
+    {
+        if ($this->categories->contains($category)) {
+            return;
+        }
+
+        $this->categories[] = $category;
     }
 
     /**
@@ -515,6 +544,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->address,
             $this->city,
             $this->zip
-            ) = unserialize($serialized);
+            )
+            = unserialize($serialized);
     }
 }

@@ -40,18 +40,18 @@ class Review
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="reviews")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $user_id;
+    private $user;
 
     /**
      * @var int
      *
      * @ORM\ManyToOne(targetEntity="Restaurant", inversedBy="reviews")
-     * @ORM\JoinColumn(name="restaurant_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $restaurant_id;
+    private $restaurant;
 
     public function __toString()
     {
@@ -107,41 +107,41 @@ class Review
     }
 
     /**
-     * @return int|null
+     * @return User|null
      */
-    public function getUserId(): ?int
+    public function getUser()
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * @param User $user_id
+     * @param User $user
      *
      * @return Review
      */
-    public function setUserId(User $user_id): Review
+    public function setUser(User $user): Review
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return int|null
+     * @return Restaurant|null
      */
-    public function getRestaurantId(): ?int
+    public function getRestaurant()
     {
-        return $this->restaurant_id;
+        return $this->restaurant;
     }
 
     /**
-     * @param Restaurant $restaurant_id
+     * @param Restaurant $restaurant
      *
      * @return Review
      */
-    public function setRestaurantId(Restaurant $restaurant_id): Review
+    public function setRestaurant(Restaurant $restaurant): Review
     {
-        $this->restaurant_id = $restaurant_id;
+        $this->restaurant = $restaurant;
 
         return $this;
     }
