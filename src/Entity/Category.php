@@ -3,13 +3,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Category
- *
- * @package App\Entity
+ * @ApiResource
  *
  * @ORM\Entity
  * @ORM\Table(name="category")
@@ -29,6 +29,8 @@ class Category
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank()
      */
     private $name;
 

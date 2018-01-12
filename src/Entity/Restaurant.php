@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Restaurant
- *
- * @package App\Entity
+ * @ApiResource
  *
  * @ORM\Entity
  * @ORM\Table(name="restaurant")
@@ -28,6 +28,8 @@ class Restaurant
      * @var string
      *
      * @ORM\Column(type="string", length=50, nullable=false)
+     *
+     * @Assert\Length(min=1, max=50)
      */
     private $name;
 
@@ -35,41 +37,53 @@ class Restaurant
      * @var string
      *
      * @ORM\Column(type="text")
+     *
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=150)
+     *
+     * @Assert\Length(min=5, max=150)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
+     *
+     * @Assert\Length(min=1, max=50)
      */
     private $city;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=6)
+     * @ORM\Column(type="integer", length=6)
+     *
+     * @Assert\Length(min=5, max=6)
      */
     private $zip;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="decimal", precision=10, scale=8)
+     *
+     * @Assert\NotBlank()
      */
     private $lat;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="decimal", precision=11, scale=8)
+     *
+     * @Assert\NotBlank()
      */
     private $lng;
 
@@ -82,11 +96,6 @@ class Restaurant
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="restaurants")
      */
     private $categories;
-
-    public function __toString()
-    {
-        return $this->getName();
-    }
 
     public function __construct()
     {
@@ -267,5 +276,10 @@ class Restaurant
         }
 
         $this->categories[] = $category;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

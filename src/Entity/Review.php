@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Review
- *
- * @package App\Entity
+ * @ApiResource
  *
  * @ORM\Entity
  * @ORM\Table(name="review")
@@ -27,6 +27,8 @@ class Review
      * @var string
      *
      * @ORM\Column(type="string", length=50)
+     *
+     * @Assert\Length(min="5", max="50")
      */
     private $name;
 
@@ -38,7 +40,7 @@ class Review
     private $content;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="reviews")
      * @ORM\JoinColumn(nullable=false)
@@ -46,7 +48,7 @@ class Review
     private $user;
 
     /**
-     * @var int
+     * @var Restaurant
      *
      * @ORM\ManyToOne(targetEntity="Restaurant", inversedBy="reviews")
      * @ORM\JoinColumn(nullable=false)
