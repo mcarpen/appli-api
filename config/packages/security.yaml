@@ -20,20 +20,22 @@ security:
             pattern: ^/api/login
             stateless: true
             anonymous: true
-            form_login:
+            json_login:
+                username_path:            username
+                password_path:            password
                 check_path:               /api/login
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
+                remember_me:              true
+                use_forward:              false
         api:
             pattern:   ^/api/
             stateless: true
+            anonymous: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-            #guard:
-            #    authenticators:
-            #        - App\Security\ApiTokenAuthenticator
         main:
             pattern:   ^/
             anonymous: ~
@@ -45,17 +47,9 @@ security:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
 
-
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # https://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # https://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
     access_control:
         - { path: ^/login,      roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/docs,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,        roles: ROLE_USER }
         - { path: ^/admin,      roles: ROLE_ADMIN }

@@ -2,7 +2,7 @@
 
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
          backupGlobals="false"
          colors="true"
          bootstrap="vendor/autoload.php"
@@ -15,6 +15,10 @@
         <env name="APP_SECRET" value="s$cretf0rt3st"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
         <!-- define your env variables for the test env here -->
+
+        <!-- ###+ doctrine/doctrine-bundle ### -->
+        <env name="DATABASE_URL" value="sqlite:///var/data/blog_test.sqlite"/>
+        <!-- ###- doctrine/doctrine-bundle ### -->
 
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
         <env name="JWT_PRIVATE_KEY_PATH" value="var/jwt/private.pem"/>
@@ -32,5 +36,6 @@
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+        <listener class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitListener"/>
     </listeners>
 </phpunit>

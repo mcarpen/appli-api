@@ -1,5 +1,7 @@
 api_login:
     path: /api/login
+    defaults:
+        _format: json
 
 logout:
     path: /logout

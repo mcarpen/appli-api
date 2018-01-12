@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -9,9 +10,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class User
- *
- * @package App\Entity
+ * @ApiResource
  *
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\EntityListeners({"App\Listener\Entity\UserListener"})
@@ -36,16 +35,18 @@ class User implements AdvancedUserInterface, \Serializable
      * @Assert\NotBlank()
      *
      * @ORM\Column(type="string", length=25, unique=true)
+     *
+     * @Assert\Length(min=5, max=25)
      */
     private $username;
 
     /**
      * @var string|null
      *
+     * @ORM\Column(type="string", length=60, unique=true)
+     *
      * @Assert\NotBlank()
      * @Assert\Email()
-     *
-     * @ORM\Column(type="string", length=60, unique=true)
      */
     private $email;
 
@@ -53,6 +54,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string|null
      *
      * @ORM\Column(type="string", length=128)
+     *
+     * @Assert\NotBlank()
      */
     private $password;
 
@@ -60,6 +63,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var array
      *
      * @ORM\Column(type="json_array")
+     *
+     * @Assert\NotNull()
      */
     private $roles;
 
@@ -86,6 +91,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=30)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="30")
      */
     private $firstName;
 
@@ -93,6 +101,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=30)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max=30)
      */
     private $lastName;
 
@@ -100,6 +111,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=100)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max=100)
      */
     private $address;
 
@@ -107,6 +121,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=30)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max=30)
      */
     private $city;
 
@@ -114,6 +131,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="zip", type="string", length=6)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min=5, max=6)
      */
     private $zip;
 
@@ -127,15 +147,10 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $categories;
 
-    const ROLE_DEFAULT = 'ROLE_USER';
-    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_DEFAULT     = 'ROLE_USER';
+    const ROLE_ADMIN       = 'ROLE_ADMIN';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-
-    public function __toString()
-    {
-        return $this->getUsername();
-    }
 
     public function __construct()
     {
@@ -278,7 +293,7 @@ class User implements AdvancedUserInterface, \Serializable
             return $this;
         }
 
-        if ( ! in_array($role, $this->roles, true)) {
+        if (!in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -546,5 +561,10 @@ class User implements AdvancedUserInterface, \Serializable
             $this->zip
             )
             = unserialize($serialized);
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }
