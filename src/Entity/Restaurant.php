@@ -39,6 +39,7 @@ class Restaurant
      * @ORM\Column(type="text")
      *
      * @Assert\NotBlank()
+     * @Assert\Length(min=50)
      */
     private $description;
 
@@ -47,6 +48,7 @@ class Restaurant
      *
      * @ORM\Column(type="string", length=150)
      *
+     * @Assert\NotBlank()
      * @Assert\Length(min=5, max=150)
      */
     private $address;
@@ -56,15 +58,17 @@ class Restaurant
      *
      * @ORM\Column(type="string", length=50)
      *
+     * @Assert\NotBlank()
      * @Assert\Length(min=1, max=50)
      */
     private $city;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(type="integer", length=6)
      *
+     * @Assert\NotBlank()
      * @Assert\Length(min=5, max=6)
      */
     private $zip;
@@ -86,6 +90,45 @@ class Restaurant
      * @Assert\NotBlank()
      */
     private $lng;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=14)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="14")
+     */
+    private $phoneNumber;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="starting_price", type="integer", length=3)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min="1", max="3")
+     */
+    private $startingPrice;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ending_price", type="integer", length=3)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(min="1", max="3")
+     */
+    private $endingPrice;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json_array")
+     *
+     * @Assert\NotNull()
+     */
+    private $menu;
 
     /**
      * @ORM\OneToMany(targetEntity="Review", mappedBy="restaurant")
@@ -191,19 +234,19 @@ class Restaurant
     }
 
     /**
-     * @return null|string
+     * @return int|null
      */
-    public function getZip(): ?string
+    public function getZip(): ?int
     {
         return $this->zip;
     }
 
     /**
-     * @param string $zip
+     * @param int $zip
      *
      * @return Restaurant
      */
-    public function setZip(string $zip): Restaurant
+    public function setZip(int $zip): Restaurant
     {
         $this->zip = $zip;
 
@@ -276,6 +319,86 @@ class Restaurant
         }
 
         $this->categories[] = $category;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     *
+     * @return Restaurant
+     */
+    public function setPhoneNumber(string $phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getStartingPrice(): ?int
+    {
+        return $this->startingPrice;
+    }
+
+    /**
+     * @param int $startingPrice
+     *
+     * @return $this
+     */
+    public function setStartingPrice(int $startingPrice)
+    {
+        $this->startingPrice = $startingPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getEndingPrice(): ?int
+    {
+        return $this->endingPrice;
+    }
+
+    /**
+     * @param int $endingPrice
+     *
+     * @return $this
+     */
+    public function setEndingPrice(int $endingPrice)
+    {
+        $this->endingPrice = $endingPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getMenu(): ?array
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param array $menu
+     *
+     * @return $this
+     */
+    public function setMenu(array $menu)
+    {
+        $this->menu = $menu;
+
+        return $this;
     }
 
     public function __toString()

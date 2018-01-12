@@ -4,7 +4,6 @@ App\Entity\Category:
 
 App\Entity\User:
     user_{1..100}:
-        username (unique): <username()>
         password: <password()>
         email (unique): <fr_FR:email()>
         active: <boolean(75)>
@@ -12,7 +11,8 @@ App\Entity\User:
         last_name: <fr_FR:lastName()>
         address: <fr_FR:streetAddress()>
         city: <fr_FR:city()>
-        zip: <fr_FR:postcode()>
+        zip: <randomNumber(5)>
+        phone_number: <e164PhoneNumber()>
         category: '@category_*'
 
 App\Entity\Restaurant:
@@ -21,9 +21,13 @@ App\Entity\Restaurant:
         description: <fr_FR:text(200)>
         address: <fr_FR:streetAddress()>
         city: <fr_FR:city()>
-        zip: <fr_FR:postcode()>
+        zip: <randomNumber(5)>
         lat: <latitude()>
         lng: <longitude()>
+        phone_number: <e164PhoneNumber()>
+        starting_price: <numberBetween(1, 50)>
+        ending_price: <numberBetween(51, 150)>
+        menu: <randomElements(['E','P','D','C'], 2)>
         category: '@category_*'
 
 App\Entity\Review:

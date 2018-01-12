@@ -34,7 +34,7 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @Assert\NotBlank()
      *
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25)
      *
      * @Assert\Length(min=5, max=25)
      */
@@ -128,14 +128,24 @@ class User implements AdvancedUserInterface, \Serializable
     private $city;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="zip", type="string", length=6)
+     * @ORM\Column(name="zip", type="integer", length=6)
      *
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=6)
      */
     private $zip;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=14)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="14")
+     */
+    private $phoneNumber;
 
     /**
      * @ORM\OneToMany(targetEntity="Review", mappedBy="user")
@@ -429,21 +439,41 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @return null|string
+     * @return int|null
      */
-    public function getZip(): ?string
+    public function getZip(): ?int
     {
         return $this->zip;
     }
 
     /**
-     * @param string $zip
+     * @param int $zip
      *
      * @return $this
      */
-    public function setZip(string $zip): User
+    public function setZip(int $zip): User
     {
         $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * @param string $phoneNumber
+     *
+     * @return $this
+     */
+    public function setPhoneNumber(string $phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }

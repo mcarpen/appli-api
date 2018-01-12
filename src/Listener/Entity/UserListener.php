@@ -30,6 +30,12 @@ class UserListener
                 $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword())
             );
         }
+
+        if ( ! empty($user->getFirstName()) && ! empty($user->getLastName())) {
+            $user->setUsername(
+                $user->getFirstName() . ' ' . $user->getLastName()
+            );
+        }
     }
 
     /**
@@ -42,7 +48,7 @@ class UserListener
                 $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword())
             );
 
-            $em = $event->getEntityManager();
+            $em   = $event->getEntityManager();
             $meta = $em->getClassMetadata(User::class);
             $em->getUnitOfWork()->recomputeSingleEntityChangeSet($meta, $user);
         }
