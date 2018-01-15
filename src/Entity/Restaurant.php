@@ -3,12 +3,27 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource
+ *      attributes={
+ *          "normalization_context"={"groups"={"read"}},
+ *          "denormalization_context"={"groups"={"write"}}
+ *      },
+ *      collectionOperations={
+ *          "get"={"method"="GET", "access_control"="is_granted('ROLE_ADMIN') or (is_granted('ROLE_RESTAURANT') and )"},
+ *          "post"={"method"="POST", "access_control"="is_granted('ROLE_RESTAURANT')"}
+ *      },
+ *      itemOperations={
+ *          "get"={"method"="GET", "access_control"="is_granted('ROLE_RESTAURANT')"},
+ *          "put"={"method"="PUT", "access_control"="is_granted('ROLE_RESTAURANT')"},
+ *          "delete"={"method"="DELETE", "access_control"="is_granted('ROLE_ADMIN')"}
+ *      }
  *
  * @ORM\Entity
  * @ORM\Table(name="restaurant")
@@ -21,6 +36,8 @@ class Restaurant
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"read"})
      */
     private $id;
 
@@ -30,6 +47,8 @@ class Restaurant
      * @ORM\Column(type="string", length=50, nullable=false)
      *
      * @Assert\Length(min=1, max=50)
+     *
+     * @Groups({"read", "write"})
      */
     private $name;
 
@@ -40,6 +59,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min=50)
+     *
+     * @Groups({"read", "write"})
      */
     private $description;
 
@@ -50,6 +71,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=150)
+     *
+     * @Groups({"read", "write"})
      */
     private $address;
 
@@ -60,6 +83,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min=1, max=50)
+     *
+     * @Groups({"read", "write"})
      */
     private $city;
 
@@ -70,6 +95,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=6)
+     *
+     * @Groups({"read", "write"})
      */
     private $zip;
 
@@ -79,6 +106,8 @@ class Restaurant
      * @ORM\Column(type="decimal", precision=10, scale=8)
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"read"})
      */
     private $lat;
 
@@ -88,6 +117,8 @@ class Restaurant
      * @ORM\Column(type="decimal", precision=11, scale=8)
      *
      * @Assert\NotBlank()
+     *
+     * @Groups({"read"})
      */
     private $lng;
 
@@ -98,6 +129,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(max="14")
+     *
+     * @Groups({"read", "write"})
      */
     private $phoneNumber;
 
@@ -108,6 +141,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min="1", max="3")
+     *
+     * @Groups({"read", "write"})
      */
     private $startingPrice;
 
@@ -118,6 +153,8 @@ class Restaurant
      *
      * @Assert\NotBlank()
      * @Assert\Length(min="1", max="3")
+     *
+     * @Groups({"read", "write"})
      */
     private $endingPrice;
 
@@ -127,18 +164,28 @@ class Restaurant
      * @ORM\Column(type="json_array")
      *
      * @Assert\NotNull()
+     *
+     * @Groups({"read", "write"})
      */
     private $menu;
 
     /**
      * @ORM\OneToMany(targetEntity="Review", mappedBy="restaurant")
+     * @ApiSubresource()
      */
     private $reviews;
 
     /**
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="restaurants")
+     * @ApiSubresource()
      */
     private $categories;
+
+    /**
+     * @ORM\OneToOne(targetEntity="User", inversedBy="restaurant")
+     * @ApiSubresource()
+     */
+    private $user;
 
     public function __construct()
     {
@@ -404,5 +451,25 @@ class Restaurant
     public function __toString()
     {
         return $this->getName();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Restaurant
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
