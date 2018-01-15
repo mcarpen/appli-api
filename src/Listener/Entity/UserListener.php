@@ -33,6 +33,10 @@ class UserListener
                 $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword())
             );
         }
+
+        if ($user->isRestaurant() !== null) {
+            $user->addRole($user->isRestaurant() ? User::ROLE_RESTAURANT : User::ROLE_CUSTOMER);
+        }
     }
 
     /**

@@ -18,12 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "denormalization_context"={"groups"={"write"}}
  *      },
  *      collectionOperations={
- *          "get"={"method"="GET", "access_control"="is_granted('ROLE_USER')"},
- *          "post"={"method"="POST"}
+ *          "get"={"method"="GET", "access_control"="is_granted('ROLE_ADMIN')"},
+ *          "post"={"method"="POST", "access_control"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"}
  *      },
  *      itemOperations={
- *          "get"={"method"="GET", "access_control"="(is_granted('ROLE_USER') and user) or is_granted('ROLE_ADMIN')"},
- *          "put"={"method"="PUT", "access_control"="(is_granted('ROLE_USER') and user) or is_granted('ROLE_ADMIN')"},
+ *          "get"={"method"="GET", "access_control"="(is_granted('ROLE_USER') and object.getId() == user.getId()) or is_granted('ROLE_ADMIN')"},
+ *          "put"={"method"="PUT", "access_control"="(is_granted('ROLE_USER') and object.getId() == user.getId()) or is_granted('ROLE_ADMIN')"},
  *          "delete"={"method"="DELETE", "access_control"="is_granted('ROLE_ADMIN')"}
  *      }
  * )
@@ -70,7 +70,7 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(type="json_array")
      *
-     * TODO virtual property
+     * @Groups({"read"})
      *
      * @Assert\NotNull()
      */
@@ -172,6 +172,13 @@ class User implements AdvancedUserInterface, \Serializable
     private $phoneNumber;
 
     /**
+     * @var bool
+     *
+     * @Groups({"write"})
+     */
+    private $isRestaurant;
+
+    /**
      * @ORM\OneToMany(targetEntity="Review", mappedBy="user")
      * @ApiSubresource()
      */
@@ -183,15 +190,17 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $categories;
 
-    const ROLE_DEFAULT     = 'ROLE_USER';
-    const ROLE_ADMIN       = 'ROLE_ADMIN';
+    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
+    const ROLE_RESTAURANT = 'ROLE_RESTAURANT';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
 
     public function __construct()
     {
         $this->active     = true;
-        $this->roles      = [];
+        $this->roles      = [self::ROLE_DEFAULT];
         $this->categories = new ArrayCollection();
     }
 
@@ -256,8 +265,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getRoles(): array
     {
-        $roles   = $this->roles;
-        $roles[] = static::ROLE_DEFAULT;
+        $roles = $this->roles;
 
         return array_unique($this->roles);
     }
@@ -313,11 +321,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
         $role = mb_strtoupper($role);
 
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
+        if ( ! in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -518,6 +522,26 @@ class User implements AdvancedUserInterface, \Serializable
         }
 
         $this->categories[] = $category;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRestaurant(): ?bool
+    {
+        return $this->isRestaurant;
+    }
+
+    /**
+     * @param bool $isRestaurant
+     *
+     * @return User
+     */
+    public function setIsRestaurant(bool $isRestaurant)
+    {
+        $this->isRestaurant = $isRestaurant;
+
+        return $this;
     }
 
     /**
