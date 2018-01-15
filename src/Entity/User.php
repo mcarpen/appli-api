@@ -19,7 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      },
  *      collectionOperations={
  *          "get"={"method"="GET", "access_control"="is_granted('ROLE_ADMIN')"},
- *          "post"={"method"="POST", "access_control"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"}
+ *          "post"={"method"="POST", "access_control"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
+ *          "api_restaurants_user_get_subresource"={"method"="GET", "access_control"="(is_granted('ROLE_RESTAURANT') and object.getRestaurant().getUser().getId() == user.getId()) or is_granted('ROLE_ADMIN')"}
  *      },
  *      itemOperations={
  *          "get"={"method"="GET", "access_control"="(is_granted('ROLE_USER') and object.getId() == user.getId()) or is_granted('ROLE_ADMIN')"},
@@ -189,6 +190,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @ApiSubresource()
      */
     private $categories;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Restaurant", mappedBy="user")
+     */
+    private $restaurant;
 
     const ROLE_DEFAULT = 'ROLE_USER';
     const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
@@ -540,6 +546,26 @@ class User implements AdvancedUserInterface, \Serializable
     public function setIsRestaurant(bool $isRestaurant)
     {
         $this->isRestaurant = $isRestaurant;
+
+        return $this;
+    }
+
+    /**
+     * @return Restaurant|null
+     */
+    public function getRestaurant(): ?Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    /**
+     * @param Restaurant $restaurant
+     *
+     * @return $this
+     */
+    public function setRestaurant(Restaurant $restaurant)
+    {
+        $this->restaurant = $restaurant;
 
         return $this;
     }
