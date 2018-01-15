@@ -4,7 +4,7 @@ App\Entity\Category:
 
 App\Entity\User:
     user_{1..100}:
-        password: <password()>
+        plainPassword: <password()>
         email (unique): <fr_FR:email()>
         active: <boolean(75)>
         first_name: <fr_FR:firstName()>

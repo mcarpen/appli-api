@@ -22,6 +22,9 @@ class UserListener
 
     /**
      * @ORM\PrePersist()
+     *
+     * @param User               $user
+     * @param LifecycleEventArgs $event
      */
     public function prePersistHandler(User $user, LifecycleEventArgs $event)
     {
@@ -30,16 +33,13 @@ class UserListener
                 $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword())
             );
         }
-
-        if ( ! empty($user->getFirstName()) && ! empty($user->getLastName())) {
-            $user->setUsername(
-                $user->getFirstName() . ' ' . $user->getLastName()
-            );
-        }
     }
 
     /**
      * @ORM\PreUpdate()
+     *
+     * @param User               $user
+     * @param PreUpdateEventArgs $event
      */
     public function preUpdateHandler(User $user, PreUpdateEventArgs $event)
     {

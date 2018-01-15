@@ -3,20 +3,26 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *      attributes={
+ *          "normalization_context"={"groups"={"read"}},
+ *          "denormalization_context"={"groups"={"write"}}
+ *      }
+ * )
  *
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\EntityListeners({"App\Listener\Entity\UserListener"})
  * @ORM\Table(name="app_user")
  * @UniqueEntity(fields={"email"}, message="Email already taken")
- * @UniqueEntity(fields={"username"}, message="Username already taken")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
@@ -26,24 +32,17 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @var string|null
      *
-     * @Assert\NotBlank()
-     *
-     * @ORM\Column(type="string", length=25)
-     *
-     * @Assert\Length(min=5, max=25)
-     */
-    private $username;
-
-    /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=60, unique=true)
+     *
+     * @Groups({"read", "write"})
      *
      * @Assert\NotBlank()
      * @Assert\Email()
@@ -54,8 +53,6 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string|null
      *
      * @ORM\Column(type="string", length=128)
-     *
-     * @Assert\NotBlank()
      */
     private $password;
 
@@ -63,6 +60,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var array
      *
      * @ORM\Column(type="json_array")
+     *
+     * TODO virtual property
      *
      * @Assert\NotNull()
      */
@@ -72,6 +71,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var boolean
      *
      * @ORM\Column(type="boolean")
+     *
+     * @Groups({"read"})
      */
     private $active;
 
@@ -81,6 +82,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
+     *
+     * @Groups({"write"})
      *
      * Used by a listener to encode password when a user is created/updated with a plainPassword attribute not null.
      * Not Persisted!!
@@ -92,6 +95,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="first_name", type="string", length=30)
      *
+     * @Groups({"read", "write"})
+     *
      * @Assert\NotBlank()
      * @Assert\Length(max="30")
      */
@@ -101,6 +106,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=30)
+     *
+     * @Groups({"read", "write"})
      *
      * @Assert\NotBlank()
      * @Assert\Length(max=30)
@@ -112,6 +119,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="address", type="string", length=100)
      *
+     * @Groups({"read", "write"})
+     *
      * @Assert\NotBlank()
      * @Assert\Length(max=100)
      */
@@ -121,6 +130,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=30)
+     *
+     * @Groups({"read", "write"})
      *
      * @Assert\NotBlank()
      * @Assert\Length(max=30)
@@ -132,6 +143,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="zip", type="integer", length=6)
      *
+     * @Groups({"read", "write"})
+     *
      * @Assert\NotBlank()
      * @Assert\Length(min=5, max=6)
      */
@@ -142,6 +155,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="phone_number", type="string", length=14)
      *
+     * @Groups({"read", "write"})
+     *
      * @Assert\NotBlank()
      * @Assert\Length(max="14")
      */
@@ -149,11 +164,13 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Review", mappedBy="user")
+     * @ApiSubresource()
      */
     private $reviews;
 
     /**
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="users")
+     * @ApiSubresource()
      */
     private $categories;
 
@@ -182,19 +199,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getUsername(): ?string
     {
-        return $this->username;
-    }
-
-    /**
-     * @param string $username
-     *
-     * @return User
-     */
-    public function setUsername(string $username): User
-    {
-        $this->username = $username;
-
-        return $this;
+        return $this->email;
     }
 
     /**
@@ -561,7 +566,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return serialize([
             $this->id,
-            $this->username,
             $this->email,
             $this->password,
             $this->active,
@@ -580,7 +584,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         list (
             $this->id,
-            $this->username,
             $this->email,
             $this->password,
             $this->active,
@@ -595,6 +598,6 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function __toString()
     {
-        return $this->getUsername();
+        return $this->getEmail();
     }
 }
