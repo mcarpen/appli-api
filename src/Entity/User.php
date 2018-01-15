@@ -16,6 +16,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      attributes={
  *          "normalization_context"={"groups"={"read"}},
  *          "denormalization_context"={"groups"={"write"}}
+ *      },
+ *      collectionOperations={
+ *          "get"={"method"="GET", "access_control"="is_granted('ROLE_USER')"},
+ *          "post"={"method"="POST"}
+ *      },
+ *      itemOperations={
+ *          "get"={"method"="GET", "access_control"="(is_granted('ROLE_USER') and user) or is_granted('ROLE_ADMIN')"},
+ *          "put"={"method"="PUT", "access_control"="(is_granted('ROLE_USER') and user) or is_granted('ROLE_ADMIN')"},
+ *          "delete"={"method"="DELETE", "access_control"="is_granted('ROLE_ADMIN')"}
  *      }
  * )
  *

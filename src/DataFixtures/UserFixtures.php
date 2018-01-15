@@ -27,6 +27,7 @@ class UserFixtures extends Fixture
             (new User())
                 ->setEmail('user@user.com')
                 ->setPlainPassword('123')
+                ->addRole(User::ROLE_DEFAULT)
                 ->setFirstName('user')
                 ->setLastName('user')
                 ->setAddress('user')
