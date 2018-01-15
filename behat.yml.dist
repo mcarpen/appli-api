@@ -4,11 +4,10 @@ default:
     suites:
         default:
             contexts:
-                - kernel: '@kernel'
-                - FeatureContext: { doctrine: "@doctrine" }
+                - FeatureContext: { doctrine: "@doctrine", jwtManager: "@lexik_jwt_authentication.jwt_manager" }
                 - Behat\MinkExtension\Context\MinkContext
-                - Sanpi\Behatch\Context\RestContext
-                - Sanpi\Behatch\Context\JsonContext
+                - Behatch\Context\RestContext
+                - Behatch\Context\JsonContext
     extensions:
         Behat\Symfony2Extension:
             kernel:

@@ -7,7 +7,7 @@
         "api-platform/core": "^2.1",
         "javiereguiluz/easyadmin-bundle": "^1.17",
         "knplabs/knp-menu-bundle": "@dev",
-        "lexik/jwt-authentication-bundle": "^2.4",
+        "lexik/jwt-authentication-bundle": "^2.4@dev",
         "nelmio/alice": "^3.1",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "^4.0",
