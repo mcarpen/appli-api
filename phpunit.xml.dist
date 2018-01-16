@@ -26,6 +26,10 @@
         <env name="JWT_PASSPHRASE" value="990c5f5948fe0d648a87d41726e0f669"/>
         <env name="JWT_TOKEN" value="31557600"/>
         <!-- ###- lexik/jwt-authentication-bundle ### -->
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost:?[0-9]*$"/>
+        <!-- ###- nelmio/cors-bundle ### -->
     </php>
 
     <testsuites>
