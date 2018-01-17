@@ -16,9 +16,9 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     /**
      * {@inheritdoc}
      *
-     * @return UserInterface|null
+     * @return object
      */
-    public function loadUserByUsername($username): ?UserInterface
+    public function loadUserByUsername($username): object
     {
         return $this->findOneBy(['email' => $username]);
     }

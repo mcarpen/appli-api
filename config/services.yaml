@@ -33,6 +33,12 @@ services:
         resource: '../src/DataFixtures'
         tags: ['doctrine.fixture.orm']
 
+    acme_api.event.jwt_created_listener:
+            class: App\Listener\JWTCreatedListener
+            arguments: [ '@doctrine.orm.entity_manager']
+            tags:
+                - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
 #    app.menu_builder:
 #        class: App\Menu\MenuBuilder
 #        public: true
