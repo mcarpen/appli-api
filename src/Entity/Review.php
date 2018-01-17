@@ -33,7 +33,7 @@ class Review
     private $name;
 
     /**
-     * @var string
+     * @var array
      *
      * @ORM\Column(type="json_array", nullable=true)
      */
@@ -89,9 +89,9 @@ class Review
     }
 
     /**
-     * @return null|string
+     * @return null|array
      */
-    public function getContent(): ?string
+    public function getContent(): ?array
     {
         return $this->content;
     }
