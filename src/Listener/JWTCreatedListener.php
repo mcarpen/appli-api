@@ -30,10 +30,8 @@ class JWTCreatedListener
     public function onJWTCreated(JWTCreatedEvent $event)
     {
         $payload = $event->getData();
-
-        $repo = $this->em->getRepository(User::class);
         /** @var User $user */
-        $user = $repo->findOneBy(['email' => $payload['username']]);
+        $user = $event->getUser();
 
         $payload['first_name'] = $user->getFirstName();
         $payload['last_name'] = $user->getLastName();
